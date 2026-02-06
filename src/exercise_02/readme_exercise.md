@@ -7,11 +7,13 @@ Estimation of a unknown function by a machine learning model
 
 ## Task Formalization
 
-Write your answer here
+The task is a **regression problem**. We want to learn a mapping $f(x)$ that maps an input scalar $x$ to an output scalar $y$, such that the predicted $\hat{y}$ is as close as possible to the ground truth $y$.
 
 ### Task Formalization (Inference)
 
-Write your answer here
+Given a new, unseen input $x_{new}$, the model must predict the corresponding output $\hat{y}_{new}$.
+$$\hat{y}_{new} = f(x_{new},W)$$
+Where $W$ represents the learned parameters (weights and biases) of the model.
 ### Task Formalization (Training)
 
 Write your answer here
@@ -24,11 +26,11 @@ Write your answer here
 
 ### Dataset description
 
-Write your answer here
+We are using a dataset of recolected function output with noise, composed of $100$ samples.
 
 ### Data preparation and preprocessing
 
-Write your answer here
+We split the data into training, validation and evaluation sets. $70\%$ of the whole dataset is used in training set, while the rest is for validation ($15\%$) and evaluation ($15\%$). To ensure the dataset is balanced we shuffle the dataset before the training.
 
 ### Data augmentation
 
@@ -36,23 +38,28 @@ Write your answer here
 
 ## Model Considerations
 
-Write your answer here
+We need a model capable of learning a linear relationship.
 
 ### Suitable Loss Functions
 
-Write your answer here
+**MSE and MAE Loss:** The standard loss for regression. 
+
 
 ### Selected Loss Function
 
-Write your answer here
+**MSE Loss**.
+It is the standard default for regression problems and generally leads to faster convergence for data with Gaussian noise.
 
 ### Possible architectures
 
-Write your answer here
+* **Single Linear Layer:** A single neuron with a linear activation (or no activation). This is mathematically equivalent to Classical Linear Regression.
+* **Multi-Layer Perceptron (MLP):** A network with hidden layers and non-linear activations.
+
+*Selected Architecture:* **Multi-Layer Perceptron**. Since the target function is not linear, a single layer is theoretically sufficient and most efficient.
 
 ### Last layer activation
 
-Write your answer here
+As we want values from -inf to inf we ashall use an **identity layer** as final activation.
 
 ### Other Considerations
 

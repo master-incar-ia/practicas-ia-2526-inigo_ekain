@@ -26,13 +26,14 @@ def get_device(force: str = "auto") -> torch.device:
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
+    normalized_ds = (dataset.y.max() - dataset.y.min()) / (dataset.x.max()-dataset.x.min())
 
     # Split the dataset into train, validation, and test sets
-    train_size = int(0.7 * len(dataset))
-    val_size = int(0.15 * len(dataset))
-    test_size = len(dataset) - train_size - val_size
+    train_size = int(0.7 * len(normalized_ds))
+    val_size = int(0.15 * len(normalized_ds))
+    test_size = len(normalized_ds) - train_size - val_size
     train_dataset, val_dataset, test_dataset = random_split(
-        dataset, [train_size, val_size, test_size]
+        normalized_ds, [train_size, val_size, test_size]
     )
 
     # Create DataLoaders for the datasets
@@ -43,7 +44,7 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim = 1
     output_dim = 1
-    model = MultiplePerceptron(input_dim, output_dim).to(device)
+    model = MultiplePerceptron(input_dim, output_dim,10,10).to(device)
     criterion = nn.MSELoss()
     optimizer = optim.AdamW(model.parameters(), lr=0.0001)
 
