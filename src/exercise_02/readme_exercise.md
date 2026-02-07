@@ -55,7 +55,7 @@ It is the standard default for regression problems and generally leads to faster
 * **Single Linear Layer:** A single neuron with a linear activation (or no activation). This is mathematically equivalent to Classical Linear Regression.
 * **Multi-Layer Perceptron (MLP):** A network with hidden layers and non-linear activations.
 
-*Selected Architecture:* **Multi-Layer Perceptron**. Since the target function is not linear, a single layer is theoretically sufficient and most efficient.
+*Selected Architecture:* **Multi-Layer Perceptron**. Since the target function is not linear, a single layer isn't sufficient.
 
 ### Last layer activation
 
