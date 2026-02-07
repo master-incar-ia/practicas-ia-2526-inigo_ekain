@@ -26,14 +26,25 @@ def get_device(force: str = "auto") -> torch.device:
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
-    normalized_ds = (dataset.y.max() - dataset.y.min()) / (dataset.x.max()-dataset.x.min())
+    
+    dataset_normalize = dataset
+    # Obtain the range in x
+    x_max = max(dataset_normalize.x)
+    x_min = min(dataset_normalize.x)
+    # Obtain the range in y
+    y_max = max(dataset_normalize.y)
+    y_min = min(dataset_normalize.y)
+    # Normalize the data to be between 0 and 1
+    dataset_normalize.x = (dataset_normalize.x - x_min) / (x_max - x_min)
+    dataset_normalize.y = (dataset_normalize.y - y_min) / (y_max - y_min)
 
     # Split the dataset into train, validation, and test sets
-    train_size = int(0.7 * len(normalized_ds))
-    val_size = int(0.15 * len(normalized_ds))
-    test_size = len(normalized_ds) - train_size - val_size
+    # Split the dataset into train, validation, and test sets
+    train_size = int(0.7 * len(dataset_normalize))
+    val_size = int(0.15 * len(dataset_normalize))
+    test_size = len(dataset_normalize) - train_size - val_size
     train_dataset, val_dataset, test_dataset = random_split(
-        normalized_ds, [train_size, val_size, test_size]
+        dataset_normalize, [train_size, val_size, test_size]
     )
 
     # Create DataLoaders for the datasets

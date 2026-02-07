@@ -8,7 +8,8 @@ from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
 from .dataset import NoisyRegressionDataset
-from .model import MultiplePerceptron
+from .model import MultiLayerPerceptron
+
 
 def get_device(force: str = "cuda") -> torch.device:
     """Return a torch.device based on the `force` option.
@@ -23,16 +24,29 @@ def get_device(force: str = "cuda") -> torch.device:
     # auto
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
 
+    # ADDED CODE -> WE NORMALIZE THE DATA
+    dataset_normalize = dataset
+    # Obtain the range in x
+    x_max = max(dataset_normalize.x)
+    x_min = min(dataset_normalize.x)
+    # Obtain the range in y
+    y_max = max(dataset_normalize.y)
+    y_min = min(dataset_normalize.y)
+    # Normalize the data to be between 0 and 1
+    dataset_normalize.x = (dataset_normalize.x - x_min) / (x_max - x_min)
+    dataset_normalize.y = (dataset_normalize.y - y_min) / (y_max - y_min)
+
     # Split the dataset into train, validation, and test sets
-    train_size = int(0.7 * len(dataset))
-    val_size = int(0.15 * len(dataset))
-    test_size = len(dataset) - train_size - val_size
+    train_size = int(0.7 * len(dataset_normalize))
+    val_size = int(0.15 * len(dataset_normalize))
+    test_size = len(dataset_normalize) - train_size - val_size
     train_dataset, val_dataset, test_dataset = random_split(
-        dataset, [train_size, val_size, test_size]
+        dataset_normalize, [train_size, val_size, test_size]
     )
 
     # Create DataLoaders for the datasets
@@ -43,12 +57,12 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim = 1
     output_dim = 1
-    model = MultiplePerceptron(input_dim, output_dim).to(device)
+    model = MultiLayerPerceptron(input_dim, output_dim).to(device)
     criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.0025)
+    optimizer = optim.AdamW(model.parameters(), lr=0.0001)
 
     # Training loop with validation and saving best weights
-    num_epochs = 100
+    num_epochs = 20
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -64,8 +78,6 @@ def train_model(output_folder: Path, device: torch.device):
             targets_cuda = targets.to(device)
             outputs = model(inputs_cuda, use_activation=False)
             loss = criterion(outputs, targets_cuda)
-
-
 
             train_loss += loss.item()
 
@@ -95,12 +107,12 @@ def train_model(output_folder: Path, device: torch.device):
             best_val_loss = val_loss
             torch.save(model.state_dict(), best_model_path)
 
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 1 == 0:
             print(
-                f"Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Validation Loss: {val_loss:.4f}"
+                f"Epoch [{epoch + 1}/{num_epochs}], Train Loss: {train_loss:.9f}, Validation Loss: {val_loss:.9f}"
             )
 
-    print(f"Best validation loss: {best_val_loss:.4f}, Model saved to {best_model_path}")
+    print(f"Best validation loss: {best_val_loss:.9f}, Model saved to {best_model_path}")
 
     # Plotting the training and validation loss
     plt.figure(figsize=(10, 5))
@@ -113,18 +125,16 @@ def train_model(output_folder: Path, device: torch.device):
 
     # Save the plot to the outs/ folder
     plt.savefig(output_folder / "loss_plot.png")
-    plt.savefig(output_folder / "loss_plot.png")
+
 
 if __name__ == "__main__":
     # Create output folder based on file folder
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name  
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
     output_folder.mkdir(exist_ok=True, parents=True)
 
-    device = get_device("auto") # choices are "auto", "cpu", "cuda"
+    device = get_device("auto")  # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
 
     # Set the seed for reproducibility
     torch.manual_seed(42)
-    
-    
