@@ -7,7 +7,7 @@ class MultiplePerceptron(nn.Module):
         super().__init__()
         self.fc_input = nn.Linear(input_dim, dim1)
         self.fc=nn.Linear(dim1, dim2)
-        self.fc_output = nn.Sigmoid(dim2, output_dim)
+        self.fc_output = nn.Linear(dim2, output_dim)
         self.activation = nn.ReLU()
 
     def forward(self, x, use_activation=True,layers=10):
