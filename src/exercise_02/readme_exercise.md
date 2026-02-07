@@ -34,7 +34,7 @@ We split the data into training, validation and evaluation sets. $70\%$ of the w
 
 ### Data augmentation
 
-Write your answer here
+There is no data augmentation
 
 ## Model Considerations
 
@@ -63,15 +63,15 @@ As we want values from -inf to inf we ashall use an **identity layer** as final 
 
 ### Other Considerations
 
-Write your answer here
+No other considerations were made.
 
 ## Training
 
-Write your answer here
+We train our MLP with the following hyperparameters.
 
 ### Training hyperparameters
 
-Write your answer here
+To train the model we are using a batch size of 10 samples, an ADAM optimizer with start learning rate of $0.0001$ and 20 epochs to avoid underfitting and overfitting.
 
 ### Loss function graph
 
@@ -79,13 +79,13 @@ Write your answer here
 
 ### Discussion of the training process
 
-Write your answer here
+The loss of training and validations decrases as epochs number increases. This means there is no overfitting.
 
 ## Evaluation
 
 ### Evaluation metrics
 
-Write your answer here
+The results show that the prediction made by the model is working well.
 
 ![image](../../outs/exercise_02/train_regression_plot.png)
 
@@ -119,15 +119,16 @@ Example for test set:
 ### Discussion of the results
 
 How the model solves the problem?
+The model behaves as spected solving the linear regresion of the unknown ecuation.
 Is there overfitting, underfitting or any other issues? 
-How can we improve the model?
-How this model will generalize to new data?
+While the train loss decreases there is no increase in validation loss, this means the model is not learning by heart the training data so there is no overfitting. In addition, as the model loss is significantly small there isn't signs of underfitting.
+How can we improve the model? How this model will generalize to new data?
+The model learns how to solve the problem of the regresion function but if there was another function with the same parameters but with an offset, the model wouldn't be able to solve the problem. To solve this a convolutional model could be the best option.
+
 
 ## Design Feedback loops
 
-Describe the process you have followed to improve the model and the evolution of performance of the model during the process.
-
-You can include a table stating the chanched parameters and the obtained results after the process.
+No feedback loops were made
 
 
 ## Questions
