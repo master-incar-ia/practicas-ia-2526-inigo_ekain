@@ -8,10 +8,10 @@ import torch
 from torch.utils.data import DataLoader, random_split
 
 from .dataset import NoisyRegressionDataset
-from .model import MultiplePerceptron
+from .model import MultiLayerPerceptron
 
 
-def evaluate_and_plot(loader,model, dataset_name, output_folder):
+def evaluate_and_plot(loader, model, dataset_name, output_folder):
     model.eval()
     all_inputs = []
     all_outputs = []
@@ -34,6 +34,11 @@ def evaluate_and_plot(loader,model, dataset_name, output_folder):
         ).transpose(),
         columns=["x", "y_true", "y_pred"],
     )
+
+    # ADDED CODE -> DENORMALIZE THE DATA
+    df.y_true = df.y_true * (y_max - y_min) + y_min
+    df.y_pred = df.y_pred * (y_max - y_min) + y_min
+    df.x = df.x * (x_max - x_min) + x_min
 
     # Calculate r2, MAE and MSE
     r2 = 1 - np.sum((all_targets - all_outputs) ** 2) / np.sum(
@@ -100,12 +105,24 @@ if __name__ == "__main__":
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
 
+    # ADDED CODE -> WE NORMALIZE THE DATA
+    dataset_normalize = dataset
+    # Obtain the range in x
+    x_max = max(dataset_normalize.x)
+    x_min = min(dataset_normalize.x)
+    # Obtain the range in y
+    y_max = max(dataset_normalize.y)
+    y_min = min(dataset_normalize.y)
+    # Normalize the data to be between 0 and 1
+    dataset_normalize.x = (dataset_normalize.x - x_min) / (x_max - x_min)
+    dataset_normalize.y = (dataset_normalize.y - y_min) / (y_max - y_min)
+
     # Split the dataset into train, validation, and test sets
-    train_size = int(0.7 * len(dataset))
-    val_size = int(0.15 * len(dataset))
-    test_size = len(dataset) - train_size - val_size
+    train_size = int(0.7 * len(dataset_normalize))
+    val_size = int(0.15 * len(dataset_normalize))
+    test_size = len(dataset_normalize) - train_size - val_size
     train_dataset, val_dataset, test_dataset = random_split(
-        dataset, [train_size, val_size, test_size]
+        dataset_normalize, [train_size, val_size, test_size]
     )
 
     # Create DataLoaders for the datasets
@@ -114,7 +131,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
 
     # Load the best model weights
-    model = MultiplePerceptron(input_dim=1, output_dim=1, dim1=20, dim2=20)
+    model = MultiLayerPerceptron(input_dim=1, output_dim=1)
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
     metrics = {}

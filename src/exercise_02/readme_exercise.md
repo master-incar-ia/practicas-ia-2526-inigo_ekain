@@ -118,12 +118,8 @@ Example for test set:
 
 ### Discussion of the results
 
-How the model solves the problem?
 The model behaves as spected solving the linear regresion of the unknown ecuation.
-Is there overfitting, underfitting or any other issues? 
-While the train loss decreases there is no increase in validation loss, this means the model is not learning by heart the training data so there is no overfitting. In addition, as the model loss is significantly small there isn't signs of underfitting.
-How can we improve the model? How this model will generalize to new data?
-The model learns how to solve the problem of the regresion function but if there was another function with the same parameters but with an offset, the model wouldn't be able to solve the problem. To solve this a convolutional model could be the best option.
+While the train loss decreases there is no increase in validation loss, this means the model is not learning by heart the training data so there is no overfitting. In addition, as the model loss is significantly small there isn't signs of underfitting.The model learns how to solve the problem of the regresion function but if there was another function with the same parameters but with an offset, the model wouldn't be able to solve the problem. To solve this a convolutional model could be the best option.
 
 
 ## Design Feedback loops

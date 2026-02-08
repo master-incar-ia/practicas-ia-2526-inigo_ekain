@@ -26,7 +26,7 @@ class NoisyRegressionDataset(Dataset):
 
     def plot(self, filepath):
         ax = sns.scatterplot(self.df, x="x", y="y")
-        ax.set_title("Synthetic noisy data of y=5*x+2")
+        ax.set_title("Synthetic noisy data of y=100*sin(8*pi*x/100)+2")
         plt.savefig(filepath)
         plt.show()
 
@@ -40,7 +40,7 @@ class NoisyRegressionDataset(Dataset):
 
 
 if __name__ == "__main__":
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name 
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
     output_folder.mkdir(exist_ok=True, parents=True)
 
     dataset = NoisyRegressionDataset()
