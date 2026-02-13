@@ -26,16 +26,16 @@ class CIFAR10Dataset(Dataset):
                 plt.yticks([])
                 plt.grid(False)
                 img = self.data[i * 10 + j][0].permute(1, 2, 0)
-                # change axis 0 and 3
+                #change axis 0 and 3
                 plt.imshow(img, cmap=plt.cm.binary)
                 plt.xlabel(self.data.classes[self.data[i * 10 + j][1]])
-        plt.savefig(filepath)
         plt.show()
+        plt.savefig(filepath)
         plt.close()
 
 
 if __name__ == "__main__":
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name 
     output_folder.mkdir(exist_ok=True, parents=True)
 
     # Data augmentation

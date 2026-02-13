@@ -1,55 +1,94 @@
 
-# Exercise 1: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
+# Exercise 4: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
 
 ## Objective
 
-Develop a model that can classify images from CIFAR-10 dataset
+The objective of this exercise is to develop a Deep Learning model that can classify images from the CIFAR-10 dataset.
 
-Then try a model with convolutional layers
-Create an evaluate.py file that evaluates the model and calculates and stores the evaluation metrics including a confusion matrix
+In this case, we will use a Convolutional Neural Network (CNN), which will be compared with a classifier based on dense networks in Exercise 5.
 
 
-Compare this method with previous one (previous exercise)
-Whats the effect of data augmentation?
-
-Compare both methods and discuss the differences
-
+Finally, the both models will be compared and their difference discused
 ## Task Formalization
 
-Write your answer here
+The task in hand can be formalized in two steps. First, we will define what we are tring to achieve as clearlly as possible. Second, we will define the approach we are taking to solve it.
 
-### Task Formalization (Inference)
+### What we are trying to do (Inference)
+There is an unknown function $f$ for which we have a bunch of data about certain input $x$ and its corresponding output $y$.
 
-Write your answer here
-### Task Formalization (Training)
+$$
+y = f(x)
+$$
 
-Write your answer here
+We are trying to create a model of $f$ using a Machine Learning method to infer the $W$ weight matrix that better expreses the relationship between $x$-$y$ pair of data. Mathematically expressed:
 
-## Evaluation metrics
+$$
+y = f(W,x)
+$$
 
-Write your answer here
+Graphically expressed:
 
-## Data Considerations
+```mermaid
+graph TD
+    A((x)) --> B["f(W,x)"]
+    B --> C((y))
+    
+```
+The input vector has size [100 x 1]. The weight matrix has size [1 x 1]
 
-### Dataset description
+### How we are going to do it (Training)
 
-Write your answer here
+The model is fed with an input x and produces a predicted output y'. Then the predicted output y' is compared with the true value y using a loss function. Finally, the model’s weights W and biases b are adjusted in a way that minimizes this loss value.
+
+This process is repeated until the specified number of epochs is completed or until the desired loss value is reached
+
+```mermaid
+graph TD
+    A((x)) 
+    B((y))
+    C((y'))
+    M["f(W,x)"]
+    L(Loss)
+    
+    M --> C
+    C --> L
+    B --> L
+    A --> M
+    L --> W
+    W --> M
+```
+
+## CIFAR10 dataset
+CIFAR10 is a dataset that contains 60k images, split into 50k training/validation images and 10k test images, of 10 distinct, mutually exclusive classes. 
+
+Normally, this dataset is used as a standard benchmark for evaluating classification models.
+
+To better understand this dataset, an example is shown below:
+![Image](/outs/exercise_04/plot_dataset_example.png)
 
 ### Data preparation and preprocessing
 
-Write your answer here
+The CIFAR10 dataset was split into training, validation and test, following the next porcentage.
+* **Training:** 40k images (66.66...%).
+
+* **Evaluation:** 10k images (16.66...%).
+* **Test:** 10k images (16.66...%)
 
 ### Data augmentation
+No data augmentation has been performed.
 
-Write your answer here
+## Evaluation metrics
+Since this exercise is a classification problem, the selected evaluation metrics are accuracy, precision, recall, and F1-score. Additionally, a confusion matrix is plotted to visualize how the predictions are distributed across the true classes.
+
+However, other evaluation metrics for classification problems could also be used, such as balanced accuracy, specificity, or custom metrics
 
 ## Model Considerations
 
-Write your answer here
+This section describes the selected Deep Learning model, along with the loss function, the final activation layer, and the training hyperparameters.
 
-### Suitable Loss Functions
+### Loss Functions
 
-Write your answer here
+
 
 ### Selected Loss Function
 

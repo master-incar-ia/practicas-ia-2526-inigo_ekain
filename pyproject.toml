@@ -7,9 +7,7 @@ version = "0.0.1"
 
 dependencies = [
     "numpy>=1.21.2",
-    "torch",
     "scipy>=1.7.3",
-    "torchvision",
     "opencv-python",
     "python-dotenv",
     "pytorch-lightning",
