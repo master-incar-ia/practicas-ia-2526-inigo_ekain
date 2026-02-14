@@ -1,5 +1,5 @@
 
-# Exercise 1: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
+# Exercise 5: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
 
 ## Objective
 

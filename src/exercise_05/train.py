@@ -9,7 +9,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from .dataset import CIFAR10Dataset
-from .model import ConvolutionalNeuralNetwork,VGG
+from .model import MLP
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -40,12 +40,12 @@ def train_model(output_folder: Path, device: torch.device):
 
     # Create DataLoaders for the datasets
     pin_memory = True if device.type == "cuda" else False
-    train_loader = DataLoader(train_subset, batch_size=2048, shuffle=True, pin_memory=pin_memory)
-    val_loader = DataLoader(val_subset, batch_size=2048, shuffle=False, pin_memory=pin_memory)
+    train_loader = DataLoader(train_subset, batch_size=2024, shuffle=True, pin_memory=pin_memory)
+    val_loader = DataLoader(val_subset, batch_size=2024, shuffle=False, pin_memory=pin_memory)
 
     # Define the model, loss function, and optimizer
     output_dim = 10  # CIFAR-10 has 10 classes
-    model = VGG(output_dim=output_dim).to(device)
+    model = MLP(output_dim=output_dim).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.AdamW(model.parameters(), lr=0.0001)
 
@@ -65,7 +65,8 @@ def train_model(output_folder: Path, device: torch.device):
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
             outputs = model(inputs_cuda)
-            loss = criterion(outputs, targets_cuda)
+            probs = torch.softmax(outputs, dim=1)
+            loss = criterion(probs, targets_cuda)
 
             train_loss += loss.item()
 
@@ -85,7 +86,8 @@ def train_model(output_folder: Path, device: torch.device):
                 inputs_cuda = inputs.to(device)
                 targets_cuda = targets.to(device)
                 outputs = model(inputs_cuda)
-                loss = criterion(outputs, targets_cuda)
+                probs = torch.softmax(outputs, dim=1)
+                loss = criterion(probs, targets_cuda)
                 val_loss += loss.item()
 
         val_loss /= len(val_loader)

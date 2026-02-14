@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 
 from .dataset import CIFAR10Dataset
-from .model import VGG, ConvolutionalNeuralNetwork
+from .model import MLP
 
 
 def evaluate_and_plot(loader, model, dataset_name, output_folder):
@@ -22,8 +22,9 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
     with torch.no_grad():
         for inputs, targets in loader:
             outputs = model(inputs)
+            probs = torch.softmax(outputs, dim=1)
             all_inputs.append(inputs.numpy())
-            all_outputs.append(outputs.numpy())
+            all_outputs.append(probs.numpy())
             all_targets.append(targets.numpy())
 
     all_inputs = np.concatenate(all_inputs)
@@ -155,12 +156,12 @@ if __name__ == "__main__":
     test_dataset = CIFAR10Dataset("./data", train=False, transform=transform)
 
     # Create DataLoaders for the datasets
-    train_loader = DataLoader(train_subset, batch_size=10, shuffle=True)
-    val_loader = DataLoader(val_subset, batch_size=10, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
+    train_loader = DataLoader(train_subset, batch_size=2024, shuffle=True)
+    val_loader = DataLoader(val_subset, batch_size=2024, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=2024, shuffle=False)
 
     # Load the best model weights
-    model = VGG(output_dim=10)
+    model = MLP(output_dim=10, hidden_layers=5)
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
     metrics = {}

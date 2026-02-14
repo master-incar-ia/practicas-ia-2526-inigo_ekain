@@ -69,9 +69,9 @@ To better understand this dataset, an example is shown below:
 ### Data preparation and preprocessing
 
 The CIFAR10 dataset was split into training, validation and test, following the next porcentage.
-* **Training:** 40k images (66.66...%).
+* **Training:** 45k images (75...%).
 
-* **Evaluation:** 10k images (16.66...%).
+* **Evaluation:** 5k images (8.33...%).
 * **Test:** 10k images (16.66...%)
 
 ### Data augmentation
@@ -84,100 +84,142 @@ However, other evaluation metrics for classification problems could also be used
 
 ## Model Considerations
 
-This section describes the selected Deep Learning model, along with the loss function, the final activation layer, and the training hyperparameters.
+This section describes the selected Deep Learning model for image classification, including the loss function, final activation layer, and training hyperparameters.
 
 ### Loss Functions
 
-
-
-### Selected Loss Function
-
-Write your answer here
+The selected loss function was Cross-Entropy, since the task is a classification problem. However, other custom loss functions specifically designed for classification tasks could also be used.
 
 ### Possible architectures
 
-Write your answer here
+The architecture selected for this problem was a Convolutional Neural Network (CNN) composed of two main blocks. Each block consists of a Convolutional layer, followed by a ReLU activation function and a MaxPooling layer. After these blocks, a flattening operation is applied, followed by a fully connected network and a final Softmax activation layer.
+
+Additionally, a modified version of the VGG network adapted to the CIFAR-10 image size (32×32) was also implemented.
 
 ### Last layer activation
 
-Write your answer here
+As final activation layer a Softmax function is used. This choice is appropriate for multiclass classification problems, such as CIFAR-10, which transforms the likelihood of each class between 0 and 1, ensuring that the sum of predicted probabilities is exactly 1.0 (or 100%).
 
 ### Other Considerations
 
-Write your answer here
+The presented architectures were used for this exercise. However, any other architecture, for regresion problems, could be used. The only requirement is that the model must be sufficiently complex to capture the underlying patterns in the data, but not overly complex in order to avoid overfitting.
 
 ## Training
 
-Write your answer here
+In this section, the training process used in the exercise is described.
 
 ### Training hyperparameters
 
-Write your answer here
+The selected training hyperparameters where the next ones:
+
+- **Number of epochs:** 80 epochs.
+- **Learning rate:** $1\times10^{-4}$.
+- **Batch size:** 32.
+- **Optimizer:** AdamW $\rightarrow$ A modern version of the Adam optimizer that uses decoupled weight decay.
+
+These hyperparameters were selected to accelerate training convergence while improving stability and introducing some stochasticity into the gradient, reducing the risk of getting trapped in local minima.
 
 ### Loss function graph
 
-![image](../../outs/exercise_05/loss_plot.png)
+![image](../../outs/exercise_04/loss_plot_1.png)
 
 ### Discussion of the training process
 
-Write your answer here
+As it can be seen in the figure above, the training and validation loss functions decreases smoothly with no overfitting or underfitting. However, the validation loss curves starts to stabilize around the epochs 60-80, indicating that first signal of overfit if the model is trainned with more epochs.
 
 ## Evaluation
+This section analyzes the obtained results.
 
 ### Evaluation metrics
 
-Write your answer here
+The obtained confution matrix for test is the next ones:
 
-![image](../../outs/exercise_05/train_regression_plot.png)
+**Training Confution Matrix:**
 
-![image](../../outs/exercise_05/validation_regression_plot.png)
+<img src="../../outs/exercise_04/confusion_matrix_test_1.png" width="500">
 
-![image](../../outs/exercise_05/test_regression_plot.png)
+**Validation Confusion Matrix:**
 
-Metrics for each dataset is depicted: 
+<img src="../../outs/exercise_04/confusion_matrix_validation_1.png" width="500">
 
-![image](../../outs/exercise_05/metrics.png)
+**Test Confusion Matrix:**
+<img src="../../outs/exercise_04/confusion_matrix_test_1.png" width="500">
+
+The metrics for each dataset are presented below.
+
+**Training Metrics:**
+
+<img src="../../outs/exercise_04/metrics_train_1.png" width="450">
+
+**Validation Metrics:**
+
+<img src="../../outs/exercise_04/metrics_validation_1.png" width="450">
+
+**Test Metrics:**
+
+<img src="../../outs/exercise_04/metrics_test_1.png" width="450">
 
 ### Evaluation results
 
-Here you have examples of evaluation results for train, validation and test sets.
-
-Example for train set:
-
-![image](../../outs/exercise_05/train_data_points_plot.png)
-
-
-Example for validation set:
-
-![image](../../outs/exercise_05/validation_data_points_plot.png)
-
-
-Example for test set:
-
-![image](../../outs/exercise_05/test_data_points_plot.png)
-
+As it can be seen in the evaluation metrics section, the obtained results are satisfactory, although not particularly impressive. The models has an accurary around 60%, a precision between 55%-70%, a recall between 45%-70% and a F1-Score around 50%-70%, which are expected values for a standard CNN-based classification model.
 
 ### Discussion of the results
 
-How the model solves the problem?
-Is there overfitting, underfitting or any other issues? 
-How can we improve the model?
-How this model will generalize to new data?
+**How the model solves the problem?** The model solves the problem by learning the underlying features of each image and classifying them into one of the 10 categories. During training, the Deep Learning model adjusts its weights and biases to minimize the Cross-Entropy loss function. Through this process, it gradually learns better feature representations and refines its predictions to align with the ground-truth labels.
+
+**Is there overfitting, underfitting or any other issues?** As discussed in the training and evaluation section, there weren't any overfitting or underfitting issues. However, the model started to show the first signs of overfitting.
+
+**How can we improve the model?** The model can be improved by increasing its complexity, allowing it to extract more sophisticated feature representations. One effective approach would be to incorporate additional convolutional layers, which enables the network to learn deeper, more hierarchical patterns within the data.
+
+**How this model will generalize to new data?** If the new data corresponds to the CIFAR-10 dataset, the model will generalize correctly. However, if new data from a different dataset is used, containing different classes, the model will generalize poorly.
 
 ## Design Feedback loops
 
-Describe the process you have followed to improve the model and the evolution of performance of the model during the process.
+The feedback process done in this exercise is the next one:
 
-You can include a table stating the chanched parameters and the obtained results after the process.
+### Convolutional Neural Network (1 Block):
+Initially, we began with a simple, single-block Convolutional Neural Network. This model consisted of a convolutional layer with 32 filters, followed by a Max Pooling layer and a ReLU activation function.
 
+The test results obtained were as follows:
 
+* **Confusion Matrix:**
+
+<img src="../../outs/exercise_04/confusion_matrix_test_2.png" width="500">
+
+* **Evaluation Metrics:**
+
+<img src="../../outs/exercise_04/metrics_test_2.png" width="450">
+
+### Convolutional Neural Network (2 Block):
+Next, we used the discribed model of this exercise. Where we add a little bit more of complexity incorporating an additional convolutional block.
+
+The results were shown above.
+
+### VGG implentation:
+Finally, we implemented the VGG-style model for the CIFAR10 dataset. 
+
+This model contained three convolutional blocks, each using ReLU activation functions and Max Pooling layers, as mentiones in page 54 of the Convolution Neural Network PDF.
+
+The test results obtained were as follows:
+
+* **Confusion Matrix:**
+
+<img src="../../outs/exercise_04/confusion_matrix_test.png" width="500">
+
+* **Evaluation Metrics:**
+
+<img src="../../outs/exercise_04/metrics_test.png" width="450">
 ## Questions
 
 Pleaser answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_03` folder.
 
-### Which are the differences you found between previous model and this one?
+### Which are the differences you found between previous model and this one? 
+The main difference between this model and the previous one is the architecture. In this case, we used Convolutional Layer, which are capable of extracting the main feature from the data, adapting to variations in orientation and translation.
 
-### Does the model generalizes well to new data?
+Also, the used input are RGB 32x32 images, which corresponds to an input of dimension (3,32,32), instead of the scalar input used in exercise 3.
+
+### Does the model generalizes well to new data? 
+As mentioned in the Results and Discussion section, the model will generalize to new data only if that data is from the CIFAR-10 dataset. If the data originates from a different distribution, the model will fail to generalize.
 
 
 
