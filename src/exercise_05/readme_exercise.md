@@ -28,7 +28,7 @@ During training, the system optimizes the network parameters to minimize predict
 
 
 
-The `evaluate.py` script measures the model's performance on the Training, Validation, and Test sets using three key components:
+The `evaluate.py` script measures the model's performance on the Training, Validation, and Test datasets using three components:
 
 * **Accuracy:** Calculates the overall percentage of images that were correctly classified.
 * **Confusion Matrix:** Generates a heatmap visualization to show exactly which classes are being confused with each other (e.g., if the model frequently mistakes "Cats" for "Dogs").
@@ -49,7 +49,6 @@ Normally, this dataset is used as a standard benchmark for evaluating classifica
 
 The CIFAR10 dataset was split into training, validation and test, following the next porcentage.
 * **Training:** 45k images (75...%).
-
 * **Evaluation:** 5k images (8.33...%).
 * **Test:** 10k images (16.66...%)
 
@@ -66,6 +65,7 @@ This section describes the selected Deep Learning model for image classification
 The selected loss function was the Categorical Cross-Entropy, since the task is a multiclass classification problem. 
 
 ### Possible architectures
+The task is set to use only dense layers so the architecture is of a **Multy Layer Perceptron**
 
 ### Model Architecture Explanation
 
@@ -118,7 +118,7 @@ The train loss and validation loss function evolutions are showed in the next gr
 
 ### Discussion of the training process
 
-For 80 epochs there is no notable overfitting as validation loss continues to decrease for every epoch.
+For 80 epochs there is no notable overfitting as validation loss continues to decrease for every epoch. While train loss still decreases and validation loss doesn't reach a global minimun the model can be trained for more epochs without suffering from overfitting.
 
 ## Evaluation
 This section analyzes the obtained results.
@@ -155,22 +155,22 @@ The metrics for each dataset are presented below.
 
 ### Evaluation results
 
-As it can be seen in the evaluation metrics section, the obtained results are satisfactory, but worse than the convolutional models. The models has an accurary around 50% for the test set, a precision between less than %63 for the better fitted class, a recall between 32%-65% and a F1-Score around 36%-63%. This results were expected to be worse than the CNN models.
+As it can be seen in the evaluation metrics section, the obtained results are satisfactory, but worse than the convolutional models. The model has an accurary around 50% for the test set, a precision between less than %63 for the better fitted class, a recall between 32%-65% and a F1-Score around 36%-63%. This results were expected to be worse than the CNN models.
 
 ### Discussion of the results
 
 How the model solves the problem?
 The model solves the problem with less acuracy than the previous models
 Is there overfitting, underfitting or any other issues? 
-There is no overfitting in the 80 epochs training. This means that better results could be obtained if the model was trained for more epoch until validation loss starts to grow.
+There is no overfitting in the 80 epochs training. This means that better results could be obtained if the model was trained for more epochs until validation loss starts to grow.
 How can we improve the model?
 More layers don't improve the model because when there are too many layers the model doesn't upgrade properly the weights and starts to biasing every set of data. The only reasonable way to improve the model is to add more epochs to the train process due to unseen validation grow.
 How this model will generalize to new data?
-No, this is because the MLP doesn't learn to extract characteristics as the CNN network does. So if we change the dataset by introducing transformations as rotations in the images the model would lose the prediction accuracy. However in the CNN models the feature extraction survives this kind of transformations. So if we want to generalize to new data we have to other architectures.
+This model will generalize bad to new data. This is because the MLP doesn't learn to extract characteristics as the CNN network does. So if we change the dataset by introducing transformations as rotations in the images, the model would lose the prediction accuracy. However, in the CNN models the feature extraction survives this kind of transformations. So if we want to generalize to new data we have to other architectures.
 
 ## Design Feedback loops
 
-Firsly we tried to add multiple layers to improve the model, but as said, more layers implied worse predictions so  we reduce layers. Then we improved the data comprimation for every layer. And finally we add some dropout and batchnormalization layers to reduce overfitting and improve the accuracy.
+Firsly we tried to add multiple layers to improve the model, but as said, more layers implied worse predictions. This is due to a poor propagation of the gradient: Too many layers became imposible to fit for the optimizer, and the net becames incapable of the task. To avoid this we reduced layers. Then we improved the data comprimation for every layer (3072->512->256->128->10) to ensure there is no great information loss. Finally we add some dropout and batch normalization layers to reduce overfitting and improve the accuracy. Applying the feedback loops we reached to the model evaluated.
 
 
 
