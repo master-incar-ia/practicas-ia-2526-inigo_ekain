@@ -7,20 +7,20 @@ Estimation of a unknown function by a machine learning model
 
 ## Task Formalization
 
-The task is a **regression problem**. We want to learn a mapping $f(x)$ that maps an input scalar $x$ to an output scalar $y$, such that the predicted $\hat{y}$ is as close as possible to the ground truth $y$.
+The task is a **regression problem**. We want to learn a mapping $f(x)$ that maps an input scalar $x$ to an output scalar $y$, so the predicted $\hat{y}$ is as close as possible to the real value$y$.
 
 ### Task Formalization (Inference)
 
-Given a new, unseen input $x_{new}$, the model must predict the corresponding output $\hat{y}_{new}$.
+Given a new input that the model hasn't seen yet $x_{new}$, it must predict the corresponding output $\hat{y}_{new}$.
 $$\hat{y}_{new} = f(x_{new},W)$$
 Where $W$ represents the learned parameters (weights and biases) of the model.
 ### Task Formalization (Training)
 
-Write your answer here
+During the training phase, the main goal is to find the optimal parameters (weights and biases) that minimize the error between our predictions y^​ and the real data y. We achieve this by minimizing a predefined loss function L over the entire training dataset. Mathematically, we want to find the parameters that minimize this average loss. 
 
 ## Evaluation metrics
 
-Write your answer here
+To measure how well our regresion model is performing, we use the standard evaluation for regresion models: Mean Square Error loss function.
 
 ## Data Considerations
 
@@ -38,7 +38,7 @@ There is no data augmentation
 
 ## Model Considerations
 
-We need a model capable of learning a linear relationship.
+We need a model capable of learning a linear relationship with minimum parameters to optimize computation time. 
 
 ### Suitable Loss Functions
 
@@ -85,7 +85,7 @@ The loss of training and validations decrases as epochs number increases. This m
 
 ### Evaluation metrics
 
-The results show that the prediction made by the model is working well.
+The results show that the prediction made by the model is working well because the predicted value is very similar to the real value for each dataset. 
 
 ![image](../../outs/exercise_02/train_regression_plot.png)
 
@@ -131,12 +131,11 @@ No feedback loops were made
 
 Pleaser answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_02` folder.
 
-### Which are the differences you found between previous model and this one?
-
 ### Does the model generalizes well to new data?
 
+Yes, the model generalizes very well to new, unseen data.
 
-
+We can confirm this by analyzing the loss graphs that during the training process, both the training loss and the validation loss decrease smoothly and stabilize. Most importantly, the validation loss does not start to increase at any point, which is the classic consecuence of overfitting. Because the metrics on the test set are similar to the ones on the training set, we can safely conclude that the model is successfully learning the mathematical function instead of simply memorizing the training data.
 
 
 
